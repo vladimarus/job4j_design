@@ -18,17 +18,17 @@ public class MatrixIt implements Iterator<Integer> {
 
     @Override
     public boolean hasNext() {
+        boolean res = false;
         if (data[row].length >= column + 1) {
-            return true;
+            res = true;
         } else {
             if (data.length > row + 1) {
                 row++;
                 column = 0;
-                return hasNext();
-            } else {
-                return false;
+                res = hasNext();
             }
         }
+        return res;
     }
 
     @Override
