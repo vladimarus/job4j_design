@@ -22,15 +22,16 @@ public class EvenNumbersIterator implements Iterator<Integer> {
      */
     @Override
     public boolean hasNext() {
+        boolean res = false;
         if (index < data.length) {
             if (data[index] % 2 == 0) {
-                return true;
+                res = true;
             } else {
                 index++;
-                return hasNext();
+                res = hasNext();
             }
         }
-        return false;
+        return res;
     }
 
     /**
