@@ -7,6 +7,7 @@ import java.util.Collections;
 
 /**
  * FlatMap<T> Класс разворачивания вложенных итераторов в плоский итератор.
+ *
  * @param <T> тип содержимого контейнера.
  */
 public class FlatMap<T> implements Iterator<T> {
@@ -19,16 +20,16 @@ public class FlatMap<T> implements Iterator<T> {
 
     @Override
     public boolean hasNext() {
-        boolean res = false;
-        if (cursor.hasNext()) {
-            res = true;
-        } else {
+        while (true) {
+            if (cursor.hasNext()) {
+                return true;
+            }
             if (data.hasNext()) {
                 cursor = data.next();
-                res = this.hasNext();
+            } else {
+                return false;
             }
         }
-        return res;
     }
 
     @Override
