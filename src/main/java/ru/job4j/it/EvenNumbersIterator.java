@@ -22,28 +22,24 @@ public class EvenNumbersIterator implements Iterator<Integer> {
      */
     @Override
     public boolean hasNext() {
-        boolean res = false;
-        if (index < data.length) {
+        while (index < data.length) {
             if (data[index] % 2 == 0) {
-                res = true;
-            } else {
-                index++;
-                res = hasNext();
+                return true;
             }
+            index++;
         }
-        return res;
+        return false;
     }
 
     /**
      * @return извлекает только четные элементы итерируемого массива,
-     *         при отсутствии четных элементов выкидывает NoSuchElementException
+     * при отсутствии четных элементов выкидывает NoSuchElementException
      */
     @Override
     public Integer next() {
-        if (hasNext()) {
-            return data[index++];
-        } else {
+        if (!hasNext()) {
             throw new NoSuchElementException();
         }
+        return data[index++];
     }
 }
