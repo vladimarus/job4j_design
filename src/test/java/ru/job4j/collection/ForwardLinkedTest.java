@@ -55,4 +55,12 @@ public class ForwardLinkedTest {
         assertTrue(it.hasNext());
         assertThat(it.next(), is(7));
     }
+
+    @Test
+    public void whenIsEmpty() {
+        ForwardLinked<Integer> linked = new ForwardLinked<>();
+        assertTrue(linked.isEmpty());
+        linked.add(7);
+        assertFalse(linked.isEmpty());
+    }
 }
