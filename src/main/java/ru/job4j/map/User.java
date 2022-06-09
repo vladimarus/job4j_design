@@ -34,15 +34,6 @@ public class User {
         return super.hashCode();
     }
 
-    @Override
-    public String toString() {
-        return "User{"
-                + "name='" + name + '\''
-                + ", children=" + children
-                + ", birthday=" + birthday.get(Calendar.YEAR)
-                + '}';
-    }
-
     public static void main(String[] args) {
         Calendar sameDate = Calendar.getInstance();
         User person0 = new User("Ivan", 0, sameDate);
