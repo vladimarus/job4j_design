@@ -31,7 +31,7 @@ public class User {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(name, children, birthday);
     }
 
     public static void main(String[] args) {
@@ -39,9 +39,9 @@ public class User {
         User person0 = new User("Ivan", 0, sameDate);
         User person1 = new User("Ivan", 0, sameDate);
 
-        Map<User, Object> map = new HashMap<>(Map.of(
-                person0, new Object(),
-                person1, new Object()));
+        Map<User, Object> map = new HashMap<>();
+        map.put(person0, new Object());
+        map.put(person1, new Object());
 
         System.out.println("\n" + map);
 
