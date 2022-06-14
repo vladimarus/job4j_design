@@ -27,19 +27,18 @@ public class SimpleMap<K, V> implements Map<K, V> {
         if (res) {
             int idx = indexFor(this.hash(Objects.hashCode(key)));
             table[idx] = new MapEntry<>(key, value);
-            modCount++;
             count++;
+            modCount++;
         }
         return res;
     }
 
     /**
-     *
      * @param hashCode хэш-код
      * @return хэш ключа
      */
     private int hash(int hashCode) {
-        return hashCode == 0 ? 0 : hashCode * hashCode;
+        return hashCode == 0 ? 0 : hashCode * hashCode * 31;
     }
 
     /**
@@ -49,38 +48,30 @@ public class SimpleMap<K, V> implements Map<K, V> {
      * @return индекс соответствующей записи в хэш-таблице
      */
     private int indexFor(int hash) {
-        int res;
-        if (hash == 0) {
-            res = 0;
-        } else {
-            int hashLen = 0;
+        if (hash != 0) {
             int h = hash;
-            while (h > 0) {
-                hashLen++;
-                h = h >>> 1;
+            hash = 0;
+            while (h != 0) {
+                hash += h % 10;
+                h /= 10;
             }
-            int capLen = 0;
-            int cap = capacity;
-            while (cap > 0) {
-                capLen++;
-                cap = cap >>> 1;
-            }
-            hashLen = (hashLen - capLen) / 2;
-            res = (h >>> hashLen) & (capacity - 1);
+            hash = hash % capacity;
         }
-        return res;
+        return hash;
     }
 
     private void expand() {
-        int oldCap = capacity;
+        int oldCount = count;
+        count = 0;
         capacity *= 2;
         MapEntry<K, V>[] oldTable = table;
         table = new MapEntry[capacity];
-        count = 0;
 
-        for (int index = 0; index < oldCap; index++) {
+        for (int index = 0; index < oldCount; index++) {
             MapEntry<K, V> entry = oldTable[index];
-            put(entry.key, entry.value);
+            if (entry != null) {
+                put(entry.key, entry.value);
+            }
         }
         modCount++;
     }
@@ -105,7 +96,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public Iterator<K> iterator() {
-        return new Iterator<K>() {
+        return new Iterator<>() {
 
             final int expectedModCount = modCount;
             int index = 0;
@@ -115,10 +106,10 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                while (table[index] == null || index < capacity - 1) {
+                while (table[index] == null && index < capacity - 1) {
                     index++;
                 }
-                return table[index] == null;
+                return table[index] != null;
             }
 
             @Override
