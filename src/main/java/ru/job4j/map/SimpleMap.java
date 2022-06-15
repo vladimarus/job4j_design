@@ -83,7 +83,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
         int keyHash = this.hash(Objects.hashCode(key));
         int idx = indexFor(keyHash);
         if (table[idx] != null
-                && keyHash == this.hash(Objects.hashCode(table[idx].key))
+                && key.hashCode() == table[idx].key.hashCode()
                 && table[idx].key.equals(key)) {
             res = table[idx].value;
         }
@@ -96,7 +96,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
         int keyHash = this.hash(Objects.hashCode(key));
         int idx = indexFor(keyHash);
         if (table[idx] != null
-                && keyHash == this.hash(Objects.hashCode(table[idx].key))
+                && key.hashCode() == table[idx].key.hashCode()
                 && table[idx].key.equals(key)) {
             table[idx] = null;
             modCount++;
