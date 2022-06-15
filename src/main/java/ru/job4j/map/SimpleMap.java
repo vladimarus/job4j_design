@@ -80,8 +80,11 @@ public class SimpleMap<K, V> implements Map<K, V> {
     @Override
     public V get(K key) {
         V res = null;
-        int idx = indexFor(this.hash(Objects.hashCode(key)));
-        if (table[idx] != null && table[idx].key.equals(key)) {
+        int keyHash = this.hash(Objects.hashCode(key));
+        int idx = indexFor(keyHash);
+        if (table[idx] != null
+                && keyHash == this.hash(Objects.hashCode(table[idx].key))
+                && table[idx].key.equals(key)) {
             res = table[idx].value;
         }
         return res;
@@ -90,8 +93,11 @@ public class SimpleMap<K, V> implements Map<K, V> {
     @Override
     public boolean remove(K key) {
         boolean res = false;
-        int idx = indexFor(this.hash(Objects.hashCode(key)));
-        if (table[idx] != null && table[idx].key.equals(key)) {
+        int keyHash = this.hash(Objects.hashCode(key));
+        int idx = indexFor(keyHash);
+        if (table[idx] != null
+                && keyHash == this.hash(Objects.hashCode(table[idx].key))
+                && table[idx].key.equals(key)) {
             table[idx] = null;
             modCount++;
             count--;
