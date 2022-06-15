@@ -23,12 +23,13 @@ public class SimpleMap<K, V> implements Map<K, V> {
             expand();
         }
 
-        boolean res = get(key) == null;
-        if (res) {
-            int idx = indexFor(this.hash(Objects.hashCode(key)));
+        boolean res = false;
+        int idx = indexFor(this.hash(Objects.hashCode(key)));
+        if (table[idx] == null) {
             table[idx] = new MapEntry<>(key, value);
             count++;
             modCount++;
+            res = true;
         }
         return res;
     }
@@ -61,13 +62,13 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private void expand() {
-        int oldCount = count;
         count = 0;
+        int oldCapacity = capacity;
         capacity *= 2;
         MapEntry<K, V>[] oldTable = table;
         table = new MapEntry[capacity];
 
-        for (int index = 0; index < oldCount; index++) {
+        for (int index = 0; index < oldCapacity; index++) {
             MapEntry<K, V> entry = oldTable[index];
             if (entry != null) {
                 put(entry.key, entry.value);
@@ -78,18 +79,23 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(K key) {
+        V res = null;
         int idx = indexFor(this.hash(Objects.hashCode(key)));
-        return table[idx] == null ? null : table[idx].value;
+        if (table[idx] != null && table[idx].key.equals(key)) {
+            res = table[idx].value;
+        }
+        return res;
     }
 
     @Override
     public boolean remove(K key) {
-        boolean res = get(key) != null;
-        if (res) {
-            int idx = indexFor(this.hash(Objects.hashCode(key)));
+        boolean res = false;
+        int idx = indexFor(this.hash(Objects.hashCode(key)));
+        if (table[idx] != null && table[idx].key.equals(key)) {
             table[idx] = null;
             modCount++;
             count--;
+            res = true;
         }
         return res;
     }
